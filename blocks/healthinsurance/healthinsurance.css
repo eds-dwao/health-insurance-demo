@@ -1,0 +1,570 @@
+
+
+@media screen and (min-width:1025px) and (max-width:3300px) {
+    .navigation .nav-bg article nav ul li ul {
+        position: absolute;
+        top: 1.7rem;
+        padding: 1rem .5rem;
+        border-radius: 1rem;
+        background: #fff;
+        box-shadow: 0 1px 12px #00000014;
+        z-index: 999;
+        min-width: 560px;
+        display: none
+    }
+
+    .navigation .nav-bg article nav ul li ul li {
+        display: inline-block;
+        width: 46%;
+        padding: .3rem .5rem;
+        font-size: .875rem;
+        text-transform: capitalize
+    }
+
+    .navigation .nav-bg article nav ul li ul li a {
+        padding: 0;
+        font-weight: 400
+    }
+
+    .navigation .nav-bg article nav ul li ul li a:hover {
+        background: #fff;
+        color: #136da3
+    }
+}
+
+@media screen and (max-width:1024px) {
+    .JFM_Banner.jfm_new_timer .timer-jfm:after {
+        content: "";
+        background: #136da3;
+        height: 180px;
+        width: 180px;
+        position: absolute;
+        transform: rotate(42deg);
+        right: 0;
+        top: -60px
+    }
+
+    .navigation {
+        transition: .2s
+    }
+
+    .navigation .nav-bg article {
+        position: relative;
+        padding: .6rem 0;
+        justify-content: space-between
+    }
+
+    .navigation .nav-bg article nav {
+        flex-direction: column;
+        gap: 0;
+        position: fixed;
+        width: 300px;
+        font-size: .875rem;
+        background: #fff;
+        height: 100vh;
+        right: -100%;
+        top: 60px;
+        transition: .2s ease-in-out;
+        z-index: 9;
+        box-shadow: 0 0 6px #00000026;
+        padding-top: .5rem
+    }
+
+    .navigation .nav-bg article nav ul {
+        flex-direction: column;
+        width: 100%;
+        gap: 0
+    }
+
+    .navigation .nav-bg article nav ul li {
+        padding: 0
+    }
+
+    .navigation .nav-bg article nav ul li span {
+        display: block;
+        font-weight: 400;
+        padding: .5rem .8rem
+    }
+
+    .navigation .nav-bg article nav ul li span.menu-item:after {
+        right: 0;
+        float: right;
+        top: 4px
+    }
+
+    .navigation .nav-bg article nav ul li span.menu-item.active {
+        color: #136da3;
+        font-weight: 500
+    }
+
+    .navigation .nav-bg article nav ul li span.menu-item.active:after {
+        transform: rotate(135deg);
+        top: 7px
+    }
+
+    .navigation .nav-bg article nav ul li span:hover {
+        background: #fff;
+        color: #136da3;
+        font-weight: 500
+    }
+
+    .navigation .nav-bg article nav ul li a {
+        display: block;
+        font-weight: 400;
+        text-transform: capitalize
+    }
+
+    .navigation .nav-bg article nav ul li:hover ul {
+        flex-direction: column;
+        padding: 0 .5rem;
+        font-size: .875rem
+    }
+
+    .navigation .nav-bg article nav ul.support {
+        margin: 0
+    }
+
+    .navigation .nav-bg article nav ul.support .submit-button {
+        background: 0 0;
+        font-size: .875rem;
+        color: #757575;
+        border: none;
+        justify-content: space-between
+    }
+
+    .navigation .nav-bg article nav ul.support .submit-button.menu-item:after {
+        border-color: #757575;
+        float: right
+    }
+
+    .navigation .nav-bg article nav ul.support .submit-button.menu-item.active {
+        color: #136da3
+    }
+
+    .navigation .nav-bg article nav ul.support .submit-button:hover {
+        background: 0 0;
+        color: #757575
+    }
+
+    .navigation .nav-bg article nav ul.support .menu_dropdown {
+        padding: 0 0 20px;
+        box-shadow: none;
+        min-width: auto
+    }
+
+    .navigation .nav-bg article nav ul.support .menu_dropdown li {
+        margin: 0 .8rem
+    }
+
+    .navigation .nav-bg article nav ul.support .menu_dropdown li.heading,
+    .navigation .nav-bg article nav ul.support .menu_dropdown li.support_agent {
+        display: none
+    }
+
+    .navigation .nav-bg article nav ul.support .menu_dropdown li.in-touch {
+        margin: 1rem .8rem
+    }
+
+    .navigation .nav-bg article nav ul li:last-child a,
+    .navigation .nav-bg article nav ul li:nth-last-of-type(2) a {
+        margin: 0;
+        padding: .5rem .8rem
+    }
+
+    .navigation .nav-bg article .new-support {
+        display: flex
+    }
+
+    .navigation .nav-bg article .hamburger {
+        display: block
+    }
+
+    .navigation.in .nav-bg article nav {
+        right: 0;
+        height: calc(100% - 136px);
+        overflow: auto;
+        top: 130px
+    }
+
+    .navigation .language-wrap {
+        margin-left: auto
+    }
+
+    .navigation .language-wrap .language_btn {
+        margin-left: 0
+    }
+
+    .navigation .language-wrap .language_btn>li {
+        width: 53px;
+        height: 34px
+    }
+
+    .navigation .language-wrap .language_btn>li svg {
+        transform: translate(-1px, -2px) scale(.9)
+    }
+}
+
+@media screen and (max-width:480px) {
+    .JFM_Banner {
+        overflow: inherit;
+        top: 0;
+        width: 100%;
+        z-index: 99;
+        position: sticky
+    }
+
+    .JFM_Banner article {
+        justify-content: inherit
+    }
+
+    .JFM_Banner article p:after,
+    .navigation.in .JFM_Banner {
+        display: none
+    }
+
+    .JFM_Banner .jfm_close_mob {
+        display: block;
+        position: absolute;
+        right: 0;
+        top: .2rem;
+        color: #fff;
+        padding: 0 7px;
+        cursor: pointer
+    }
+
+    .JFM_Banner .jfm_close_mob span {
+        font-size: 20px;
+        display: none
+    }
+
+    .navigation {
+        background: #fff;
+        width: 100%;
+        z-index: 999;
+        box-shadow: 0 2px 2px #00000017
+    }
+
+    .navigation .nav-bg,
+    .navigation.in .nav-bg {
+        border-radius: 0
+    }
+
+    .navigation .nav-bg article nav {
+        width: 100%
+    }
+
+    .navigation .nav-bg article .support .submit-button {
+        background: 0 0;
+        color: #136da3;
+        padding: .3rem .8rem;
+        font-size: .875rem
+    }
+
+    .navigation .nav-bg article .support .submit-button.menu-item:after {
+        border: 1px solid #136da3;
+        border-top: none;
+        border-right: none;
+        transform: rotate(-45deg)
+    }
+
+    .navigation .nav-bg article .support .submit-button:hover {
+        background: 0 0;
+        color: #136da3
+    }
+
+    .navigation .nav-bg article .support .submit-button.active:after {
+        transform: rotate(135deg);
+        top: 4px
+    }
+
+    .navigation.in {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 999
+    }
+
+    .navigation.in .nav-bg article nav {
+        right: 0;
+        height: 91%;
+        overflow: auto;
+        top: 58px
+    }
+
+    .navigation.sticky_navbar {
+        top: 0;
+        position: fixed;
+        width: 100%;
+        z-index: 99;
+        transition: top .4s, opacity .2s, background-color .4s ease-in-out
+    }
+
+    .navigation.sticky_navbar.in {
+        top: 0;
+        transition: inherit
+    }
+
+    .navigation.sticky_navbar.in nav {
+        top: 60px;
+        height: calc(100% - 136px)
+    }
+}
+
+@media screen and (max-width:359px) {
+    header .inner_header .exp_btn_outline {
+        font-size: .75rem;
+        padding: .2rem .3rem
+    }
+}
+
+
+@media only screen and (min-width:320px) and (max-width:768px) {
+    .hospital_services {
+        background-image: none;
+        padding-top: 30px
+    }
+
+    .hospital_services .d-flex .left_sec h2 {
+        margin: 0
+    }
+
+    .mobile_section .flex-3 {
+        background: #fff
+    }
+
+    .mobile_section .flex-3 .slide {
+        padding: 0
+    }
+
+    .mobile_section .flex-3 .slide h3 {
+        font-size: 16px;
+        width: 130px
+    }
+
+    .hospital_services .d-flex .left_sec,
+    .hospital_services .d-flex .left_sec form input {
+        width: 100%
+    }
+
+    .hospital_services .d-flex .left_sec .bottom_a {
+        display: table;
+        text-align: center;
+        margin-bottom: 10px !important;
+        margin: auto
+    }
+
+    .hospital_services .d-flex {
+        display: block
+    }
+
+    .hospital_services .d-flex .right-sec {
+        padding: 10px 0 0
+    }
+
+    .hospital_services .d-flex .right-sec .right_width {
+        width: 100%;
+        text-align: center
+    }
+
+    .hospital_services .d-flex .right-sec .right_width .res_img_none {
+        display: none
+    }
+
+    .hospital_services .d-flex .right-sec .right_width .container_map {
+        height: 300px;
+        position: relative;
+        padding: 0
+    }
+
+    .hospital_services .d-flex .right-sec .right_width .container_map .list_view .list_view_cont {
+        padding: 5px 10px;
+        text-align: left
+    }
+}
+
+@media screen and (max-width:768px) {
+    .whatsapp-callback-chat {
+        display: block;
+        right: 3%;
+        bottom: 5%
+    }
+
+    .get_Quote article .reach_out br,
+    .homepage .both_chatbot.showcallback,
+    .m-show {
+        display: block
+    }
+
+    .both_chatbot.showcallback,
+    .callback-chat .chatbot_main .chatInnerwrapp .chat_process.desktop_chat,
+    .m-hide {
+        display: none
+    }
+
+    footer nav {
+        flex-wrap: wrap
+    }
+
+    footer nav ul {
+        width: 33.33%;
+        margin: .5rem 0
+    }
+
+    footer nav ul:nth-child(5) {
+        margin-right: auto
+    }
+
+    .get_Quote article .reach_out img {
+        margin: 0 .3rem 0 0
+    }
+
+    .callback-chat .chatbot_main .chatInnerwrapp .whatapp_content {
+        border: 1px solid #ccc;
+        font-weight: 500;
+        display: block;
+        padding: .6rem 1rem;
+        border-radius: .6rem;
+        font-size: .875rem;
+        cursor: pointer;
+        margin: .8rem
+    }
+
+    .callback-chat .chatbot_main .chatInnerwrapp .whatapp_content a {
+        color: #1a1a1a;
+        text-decoration: none
+    }
+
+    .callback-chat .chatbot_main .chatInnerwrapp .whatapp_content a .heading {
+        font-size: .875rem;
+        font-weight: 500
+    }
+
+    .callback-chat .chatbot_main .chatInnerwrapp .whatapp_content span {
+        display: block;
+        font-weight: 400;
+        font-size: .75rem
+    }
+}
+
+@media screen and (max-width:767px) {
+    footer nav {
+        flex-wrap: wrap
+    }
+
+    footer nav ul {
+        width: 50%;
+        margin: .5rem 0
+    }
+
+    footer nav ul:nth-child(5) {
+        margin-right: auto
+    }
+
+    footer .copyright {
+        flex-direction: column;
+        padding: 1rem 0;
+        gap: 1rem
+    }
+
+    .popup_overlay .viewall_popup {
+        margin: 0 20px;
+        padding: 20px
+    }
+
+    .popup_overlay .viewall_popup .tabs {
+        justify-content: space-between;
+        padding-bottom: 10px
+    }
+
+    .popup_overlay .viewall_popup .tabs li {
+        padding: 0;
+        background: 0 0
+    }
+
+    .popup_overlay .viewall_popup .tabs li.active-tab {
+        background: 0 0;
+        color: #136da3;
+        font-weight: 500
+    }
+
+    .popup_overlay .viewall_popup .tabs-content {
+        height: 309px;
+        overflow-y: auto
+    }
+
+    .popup_overlay .viewall_popup .tabs-content li aside div {
+        width: 40%
+    }
+
+    .popup_overlay .viewall_popup h3 {
+        font-size: 1.25rem
+    }
+
+    .popup_overlay .viewall_popup.exit_intent {
+        padding: 20px
+    }
+
+    .get_Quote article .sales_number {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .3rem;
+        margin-top: .5rem
+    }
+}
+
+@media screen and (max-width:430px) {
+
+    footer .copyright,
+    footer nav {
+        flex-direction: column
+    }
+
+    footer nav ul {
+        width: 100%
+    }
+
+    .get_Quote article h4 {
+        flex-wrap: wrap
+    }
+
+    .popup_overlay .viewall_popup {
+        margin: 0 20px;
+        padding: 20px
+    }
+
+    .popup_overlay .viewall_popup .tabs {
+        justify-content: space-between;
+        padding-bottom: 10px
+    }
+
+    .popup_overlay .viewall_popup .tabs li {
+        padding: 0;
+        background: 0 0
+    }
+
+    .popup_overlay .viewall_popup .tabs li.active-tab {
+        background: 0 0;
+        color: #136da3;
+        font-weight: 500
+    }
+
+    .popup_overlay .viewall_popup .tabs-content {
+        height: 309px;
+        overflow-y: auto
+    }
+
+    .popup_overlay .viewall_popup .tabs-content li aside div {
+        width: 100%;
+        display: block
+    }
+
+    .popup_overlay .viewall_popup h3 {
+        font-size: 1.25rem
+    }
+}
+
+@media screen and (max-width:340px) {
+    .whatsapp-callback-chat {
+        bottom: 25%
+    }
+}
