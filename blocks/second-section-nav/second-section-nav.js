@@ -71,17 +71,6 @@ export default function decorate(block) {
   aEl5.textContent = 'Features';
   liEl5.append(aEl5);
   ulEl2.append(liEl5);
-
-  const liEl6 = document.createElement('li');
-  liEl6.setAttribute('class', 'nav-scroll');
-
-  const aEl6 = document.createElement('a');
-  aEl6.setAttribute('href', '#benefits');
-  aEl6.setAttribute('data-link', '#benefits');
-  aEl6.textContent = 'Benefits';
-  liEl6.append(aEl6);
-  ulEl2.append(liEl6);
-
   
   articleEl2.append(ulEl2);
   navEl.append(articleEl2);
