@@ -2,6 +2,8 @@ export default function decorate(block) {
   const container = document.createElement('div');
   container.setAttribute('class', 'container');
 
+  
+  
   const divEl = document.createElement('div');
 
     const sectionEl = document.createElement('section');
@@ -12,18 +14,8 @@ export default function decorate(block) {
         const divEl3 = document.createElement('div');
         divEl3.setAttribute('class', 'bullet_container');
 
-          const h1El = document.createElement('h1');
-          h1El.setAttribute('class', 'green_gradient_text');
-          h1El.textContent = 'Health Insurance';
-        divEl3.append(h1El);
-
-          const divEl4 = document.createElement('div');
-          divEl4.setAttribute('class', 'bullet_subheading_cont');
-
-            const pEl = document.createElement('p');
-            pEl.textContent = 'Health insurance is a security cover wherein the insurer bears the insured person’s healthcare costs in exchange for regular premium payments. You can opt for our best health insurance plans on an individual or family floater basis.';
-          divEl4.append(pEl);
-        divEl3.append(divEl4);
+      
+    
       divEl2.append(divEl3);
 
         const divEl5 = document.createElement('div');
