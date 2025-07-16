@@ -18,14 +18,14 @@ export default function decorate(block) {
     const divEl3 = document.createElement('div');
     divEl3.setAttribute('class', 'cn_container_text_header_content');
 
-    const h2El3 = document.createElement('h2');
-    h2El3.setAttribute('id', 'why-choose-care');
-    h2El3.textContent = 'Why Choose Care Health Insurance?';
-    divEl3.append(h2El3);
+    // const h2El3 = document.createElement('h2');
+    // h2El3.setAttribute('id', 'why-choose-care');
+    // h2El3.textContent = 'Why Choose Care Health Insurance?';
+    // divEl3.append(h2El3);
 
-    const pEl3 = document.createElement('p');
-    pEl3.textContent = 'Given below are some of the reasons why a health insurance policy from Care Health Insurance may be the best option for you:';
-    divEl3.append(pEl3);
+    // const pEl3 = document.createElement('p');
+    // pEl3.textContent = 'Given below are some of the reasons why a health insurance policy from Care Health Insurance may be the best option for you:';
+    // divEl3.append(pEl3);
 
     const divEl4 = document.createElement('div');
     divEl4.setAttribute('class', 'health_insurance_cover');
