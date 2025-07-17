@@ -92,7 +92,7 @@ async function createFormMulti(formHref) {
       if (submitBtn) {
         submitBtn.addEventListener("click", (e) => {
           e.preventDefault();
-  debugger
+  
           const inputs = step.querySelectorAll("input, select, textarea");
           let allValid = true;
   
