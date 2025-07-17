@@ -386,7 +386,25 @@ fieldset {
     gap: 20px;
 }
 
-.heading-wrapper > h2:first-child::before {
+#form-3::before {
+    content: '←';
+    position: absolute;
+    left: -27px;
+    top: 11px;
+    font-size: 30px;
+    color: #000;
+}
+
+#form-8 {
+    content: '←';
+    position: absolute;
+    left: -27px;
+    top: 11px;
+    font-size: 30px;
+    color: #000;
+}
+
+#form-10 {
     content: '←';
     position: absolute;
     left: -27px;
