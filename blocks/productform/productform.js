@@ -1,7 +1,7 @@
 
 
 import createField from "../form/form-fields.js";
-
+var productConfig;
 async function createFormMulti(formHref) {
     const resp = await fetch(formHref);
     const json = await resp.json();
@@ -80,7 +80,89 @@ async function createFormMulti(formHref) {
   
     return form;
   }
-export default function decorate(block) {
-console.log(block)
- 
+  function enableStepNavigation(form) {
+  
+    const steps = form.querySelectorAll(".form-step");
+  
+    steps.forEach((step, index) => {
+      const submitBtn = step.querySelector(
+        'button[type="submit"], button.next-cta, button[name="next-cta"]'
+      );
+  
+      if (submitBtn) {
+        submitBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+  debugger
+          const inputs = step.querySelectorAll("input, select, textarea");
+          let allValid = true;
+  
+          inputs.forEach((input) => {
+            
+            const isRequired =
+              input.hasAttribute("required") ||
+              input.getAttribute("mandatory") === "true";
+  
+            // Reset any previous error
+            input.classList.remove("field-error");
+  
+            if (isRequired) {
+              const value =
+                input.type === "checkbox" ? input.checked : input.value.trim();
+              if (!value) {
+                
+                allValid = false;
+                input.classList.add("field-error");
+                if (
+                  !input.nextElementSibling ||
+                  !input.nextElementSibling.classList.contains("error-msg")
+                ) {
+                  
+                  input.nextElementSibling.style.display = "block";
+                }
+              } else {
+                
+                const msg = input.nextElementSibling;
+                if (msg && msg.style.display == "block") {
+                  msg.style.display == "none";
+                }
+              }
+            }
+          });
+  
+          if (allValid) {
+            if (index < steps.length - 1) {
+              step.style.display = "none";
+              steps[index + 1].style.display = "block";
+            } else {
+              form.submit(); // Last step
+            }
+          }
+        });
+      }
+    });
+  }
+
+  async function getProductConfig(formHref){
+    const resp = await fetch(formHref);
+    const json = await resp.json();
+
+    let urlParm= window.location.search.split("=")[1]
+    console.log(json)
+    productConfig = json.data.filter(item => item.CONFIG_PRODUCTNAME === urlParm);
+console.log(productConfig)
+
+  }
+export default async function decorate(block) {
+   const formlink= block
+    .querySelector("a[href]")
+    .getAttribute("title");
+console.log(formlink)
+
+const form = await createFormMulti(formlink);
+
+ block.replaceWith(form)
+ enableStepNavigation(form);
+
+ await getProductConfig("https://main--health-insurance-demo--eds-dwao.aem.page/productconfig.json")
+
 }

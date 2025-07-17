@@ -345,13 +345,33 @@ const createInputButton = (fd) => {
   return { field, fieldWrapper };
 };
 const createMultiStepForm = (fd) => {
-  debugger
+  
   const fieldWrapper = createFieldWrapper(fd);
- debugger
+ 
   // Optionally add an ID or class
  //  button.id = 'myButton';
    return {fieldWrapper};
  };
+
+//  const createDivWrapper = (fd) => {
+  
+//   const fieldWrapper = document.createElement("div");
+ 
+//   // Optionally add an ID or class
+//  //  button.id = 'myButton';
+//    return {fieldWrapper};
+//  };
+
+ const createDivWrapper=(fd)=> {
+  const fieldWrapper = document.createElement("div");
+  if (fd.Style) {
+    fieldWrapper.className = fd.Style;
+  }
+
+  fieldWrapper.id=fd.Id?fd.ID:""
+  return {fieldWrapper};
+}
+
 
 const FIELD_CREATOR_FUNCTIONS = {
   select: createSelect,
@@ -368,7 +388,8 @@ const FIELD_CREATOR_FUNCTIONS = {
   label: createLabel,
   calrange: createCalculatorRange,
   button:createInputButton,
-  multistep:createMultiStepForm
+  multistep:createMultiStepForm,
+  div:createDivWrapper
 };
 
 export default async function createField(fd, form) {
