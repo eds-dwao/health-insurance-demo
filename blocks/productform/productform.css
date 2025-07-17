@@ -393,6 +393,7 @@ fieldset {
     top: 11px;
     font-size: 30px;
     color: #000;
+    cursor: pointer;
 }
 
 #form-8::before {
@@ -402,6 +403,7 @@ fieldset {
     top: 11px;
     font-size: 30px;
     color: #000;
+    cursor: pointer;
 }
 
 #form-10::before {
@@ -411,6 +413,7 @@ fieldset {
     top: 11px;
     font-size: 30px;
     color: #000;
+    cursor: pointer;
 }
 
 .heading-wrapper {
