@@ -395,7 +395,7 @@ fieldset {
     color: #000;
 }
 
-#form-8 {
+#form-8::before {
     content: '←';
     position: absolute;
     left: -27px;
@@ -404,7 +404,7 @@ fieldset {
     color: #000;
 }
 
-#form-10 {
+#form-10::before {
     content: '←';
     position: absolute;
     left: -27px;
