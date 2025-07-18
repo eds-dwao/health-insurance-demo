@@ -386,34 +386,14 @@ fieldset {
     gap: 20px;
 }
 
-#form-3::before {
-    content: '←';
+.back-btn {
     position: absolute;
     left: -27px;
     top: 11px;
     font-size: 30px;
     color: #000;
-    cursor: pointer;
-}
-
-#form-8::before {
-    content: '←';
-    position: absolute;
-    left: -27px;
-    top: 11px;
-    font-size: 30px;
-    color: #000;
-    cursor: pointer;
-}
-
-#form-10::before {
-    content: '←';
-    position: absolute;
-    left: -27px;
-    top: 11px;
-    font-size: 30px;
-    color: #000;
-    cursor: pointer;
+    background: transparent;
+    border: none;
 }
 
 .heading-wrapper {
