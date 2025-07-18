@@ -568,3 +568,13 @@
         bottom: 25%
     }
 }
+
+
+.form_data.fourstepper.new-form{
+    display: none !important;
+}
+
+
+.section.healthinsurance-container.productform-container{
+    display: flex;
+}

@@ -1846,10 +1846,6 @@ h1 {
     margin: 0
 }
 
-.alert_message.popup_one .modal-content .modal-inner-content .modal-inner-content,
-h2 {
-    padding: 20px 0 0
-}
 
 h2 {
     font-size: 1.875rem;
@@ -7427,7 +7423,6 @@ body.secure_page #add_ons .custom_container .add_ons_slider .slick-slide .add_on
 }
 
 .home_banner .userDetail .first_cont_data {
-    width: 45%;
     min-height: 370px;
     padding: 10px 0 0
 }
