@@ -419,3 +419,7 @@ fieldset {
 .heading-wrapper {
     position: relative;
 }
+
+.productform-wrapper{
+    margin-left: 0 !important;
+}
