@@ -286,27 +286,17 @@ body {
 }
 
 
-.fieldset-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 16px;
-    margin-bottom: 30px;
-}
-
 .family-rel {
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 12px;
-    width: 165px;
     text-align: center;
     position: relative;
     background-color: #fff;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-}
-
-.family-rel:hover {
-    border-color: #007bff;
+        width: calc(38.333333% - 14px);
+    box-shadow: 0 3px 10px #00000014;
 }
 
 .family-rel label {
@@ -384,13 +374,14 @@ fieldset {
     width: 100%;
     display: flex;
     gap: 20px;
+        flex-wrap: wrap;
 }
 
 #form-3::before {
     content: '←';
     position: absolute;
     left: -27px;
-    top: 11px;
+    top: -10px;
     font-size: 30px;
     color: #000;
     cursor: pointer;
@@ -400,7 +391,7 @@ fieldset {
     content: '←';
     position: absolute;
     left: -27px;
-    top: 11px;
+    top: -10px;
     font-size: 30px;
     color: #000;
     cursor: pointer;
@@ -410,7 +401,7 @@ fieldset {
     content: '←';
     position: absolute;
     left: -27px;
-    top: 11px;
+    top: -10px;
     font-size: 30px;
     color: #000;
     cursor: pointer;
