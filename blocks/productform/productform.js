@@ -425,18 +425,40 @@ const requestOptions = {
   headers: myHeaders,
 };
 
-fetch("https://publish-p102857-e1312424.adobeaemcloud.com/graphql/execute.json/wknd-shared/pr", requestOptions)
-  .then((response) => response.json())  // <- parse as JSON, not text
-  .then((result) => {
-    const configProductName = window.productConfig?.[0]?.CONFIG_PRODUCTNAME;
+fetch('https://publish-p102857-e1312424.adobeaemcloud.com/graphql/execute.json/wknd-shared/pr', {
+  method: 'GET', // or 'GET' depending on the API
+  headers: {
+    'Content-Type': 'application/json'
+    // Add any auth headers if required
+  },
+  // body: JSON.stringify({ key: 'value' }) // only for POST/PUT
+})
+.then(res => {
+  if (res.status === 204) {
+    console.warn("204 No Content – response is intentionally empty");
+    return null;
+  }
+  return res.json(); // only if status is not 204
+})
+.then(data => {
+  if (data) console.log("Data:", data);
+})
+.catch(err => {
+  console.error("Fetch error:", err);
+});
 
-    matchedItems = result.data.productFormList.items?.filter(item => 
-      item.productname === configProductName
-    ) || [];
+// fetch("https://publish-p102857-e1312424.adobeaemcloud.com/graphql/execute.json/wknd-shared/pr", requestOptions)
+//   .then((response) => response.json())  // <- parse as JSON, not text
+//   .then((result) => {
+//     const configProductName = window.productConfig?.[0]?.CONFIG_PRODUCTNAME;
 
-    console.log("Matched Items:", matchedItems);
-  })
-  .catch((error) => console.error("Fetch error:", error));
+//     matchedItems = result.data.productFormList.items?.filter(item => 
+//       item.productname === configProductName
+//     ) || [];
+
+//     console.log("Matched Items:", matchedItems);
+//   })
+//   .catch((error) => console.error("Fetch error:", error));
 
 
 }
