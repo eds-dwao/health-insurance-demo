@@ -1,8 +1,15 @@
 // Updated Multi-step Form with working back button and stepper logic
 
 import createField from "../form/form-fields.js";
-var productConfig;
+window.selectedData = {
+  count: {
+    child: 0,
+    adult: 0,
+  },
+  members: [], // To store selected member types like "Son", "Spouse"
+};
 
+window.matchedItems=[];
 function createBackButton(index, steps) {
   const backBtn = document.createElement("button");
   backBtn.classList.add("back-btn");
@@ -95,12 +102,78 @@ async function createFormMulti(formHref) {
 
   const fieldsets = form.querySelectorAll("fieldset");
   fieldsets.forEach((fieldset) => {
-    form.querySelectorAll(`[data-fieldset="${fieldset.name}"]`).forEach((field) => {
-      fieldset.append(field);
-    });
+    form
+      .querySelectorAll(`[data-fieldset="${fieldset.name}"]`)
+      .forEach((field) => {
+        fieldset.append(field);
+      });
   });
 
   return form;
+}
+
+function calculatePremium( sumInsured, tenureYears) {
+  const productConfig = window.productConfig?.[0];
+
+  if (!productConfig) {
+    console.error('Missing product config');
+    return 0;
+  }
+
+  const baseRate = Number(productConfig.Base);
+  const tenureDiscount = getTenureDiscount(tenureYears);
+
+  const familyMembers = window.selectedData?.members || [];
+
+  if (!Array.isArray(familyMembers) || familyMembers.length === 0) {
+    console.warn('No family members selected');
+    return 0;
+  }
+
+  // Convert all ages to numbers
+  const memberAges = familyMembers.map((m) => Number(m.age));
+
+  let totalPremium = 0;
+
+ 
+    const anchorAge = Math.max(...memberAges);
+    const ageFactor = getAgeFactor(anchorAge);
+
+    totalPremium =
+      baseRate *
+      (sumInsured / 100000) *
+      ageFactor *
+      tenureYears *
+      tenureDiscount;
+  
+  
+
+  console.log('Total Premium:', totalPremium);
+  return Math.round(totalPremium);
+}
+
+function getAgeFactor(age) {
+  // Example logic — replace with actual logic as per your rates
+  if (age <= 17) return 1.0;
+  if (age <= 30) return 1.2;
+  if (age <= 45) return 1.5;
+  if (age <= 60) return 2.0;
+  return 2.5;
+}
+
+const discountTiers = [
+  { years: 1, discount: 0 },
+  { years: 2, discount: 0.05 },
+  { years: 3, discount: 0.10 },
+  // You can add more tiers here easily
+  // { years: 4, discount: 0.15 }
+];
+
+
+
+function getTenureDiscount(tenureYears) {
+  const tier = matchedItems[0].tenureAndDiscount.find(t => t.years === tenureYears);
+  return tier ? 1 - tier.discount : 1.0;
 }
 
 function enableStepNavigation(form) {
@@ -144,12 +217,88 @@ function enableStepNavigation(form) {
         });
 
         if (allValid) {
+          const isFormStep2 = e.target.form && e.target.form.id === "step2";
+          const isFormStep3 = e.target.form && e.target.form.id === "step3";
+
+          if (isFormStep2) {
+            const config = window.productConfig[0]; // Get the config object
+            const dropdownContainer =
+              document.getElementById("person-dropdown"); // or any container
+
+            // Clear previous dropdowns
+            dropdownContainer.innerHTML = "";
+
+            selectedData.members.forEach((member, index) => {
+              const isChild = member === "Son" || member === "Daughter";
+              const startAge = isChild
+                ? Number(config.childMinAge)
+                : Number(config.minAge);
+              const endAge = isChild
+                ? Number(config.childMaxAge)
+                : Number(config.maxAge);
+
+              console.log(
+                `Creating dropdown for: ${member} (${
+                  isChild ? "Child" : "Adult"
+                })`
+              );
+              console.log(`Age range: ${startAge} to ${endAge}`);
+
+              const label = document.createElement("label");
+              label.textContent = `Select age for ${member}:`;
+              label.setAttribute("for", `age-${member}-${index}`);
+
+              const select = document.createElement("select");
+              select.id = `age-${member}-${index}`;
+              select.name = `age-${member}-${index}`;
+              console.log(`Member: ${member}`);
+              console.log(`isChild: ${isChild}`);
+              console.log(`Start Age: ${startAge}`);
+              console.log(`End Age: ${endAge}`);
+              console.log("Type of startAge:", typeof startAge);
+              console.log("Type of endAge:", typeof endAge);
+              for (let age = startAge; age <= endAge; age++) {
+                const option = document.createElement("option");
+                option.value = age;
+                option.textContent = `${age} Years`;
+                select.appendChild(option);
+              }
+
+              dropdownContainer.appendChild(label);
+              dropdownContainer.appendChild(select);
+            });
+          }
+if(isFormStep3){
+
+  const selects = e.target.form.querySelectorAll('select[id^="age-"]');
+  window.selectedData.members=[];
+  selects.forEach(select => {
+    // Get the member (Son, Daughter, etc.) and age from each select element
+    const [ , member, index ] = select.id.split('-'); // Extract member type and index (e.g., age-Son-1)
+    const selectedAge = select.value; // The selected age value
+
+    // Add the selected member and age to the members array
+    window.selectedData.members.push({ member, age: selectedAge });
+
+    // Update the count based on whether it's a child or an adult
+    if (member === 'Son' || member === 'Daughter') {
+      window.selectedData.count.child++;
+    } else {
+      window.selectedData.count.adult++;
+    }
+  });
+  console.log(window.selectedData);
+}
           if (index < steps.length - 1) {
             step.style.display = "none";
             steps[index + 1].style.display = "block";
             updateStepper(steps[index + 1]);
           } else {
-            form.submit();
+            const premium = calculatePremium( parseInt(matchedItems[0].defaultCoverage), parseInt(window.productConfig[0].tenure));
+console.log('Final Premium:', premium);
+
+const premsec =  renderpremiumsection();
+
           }
         }
       });
@@ -162,12 +311,135 @@ async function getProductConfig(formHref) {
   const json = await resp.json();
 
   let urlParm = window.location.search.split("=")[1];
-  productConfig = json.data.filter(
+  window.productConfig = json.data.filter(
     (item) => item.CONFIG_PRODUCTNAME === urlParm
   );
-  console.log(productConfig);
+}
+function renderpremiumsection() {
+  debugger
+  document.querySelectorAll('.productform-wrapper')[0].style.display = 'none';
+
+  // Helper to format rupees to Lakhs
+  function toLakh(val) {
+    return (val / 100000) + " L";
+  }
+
+  let html = '';
+  html += '<div class="premsection">';
+
+html += '<div class="section">';
+html += '<label>Looking to Insure</label>';
+
+selectedData.members.forEach((memberObj, index) => {
+  const member = memberObj.member;
+  const selectedAge = Number(memberObj.age);
+
+  const isChild = ["Son", "Daughter"].includes(member);
+  const startAge = isChild ? Number(window.productConfig[0].childMinAge) : Number(window.productConfig[0].minAge);
+  const endAge = isChild ? Number(window.productConfig[0].childMaxAge) : Number(window.productConfig[0].maxAge);
+
+  const selectId = 'insured_' + index;
+  html += '<div class="member-age-select">';
+  html += '<label for="' + selectId + '">' + member + '</label>';
+  html += '<select id="' + selectId + '" data-member="' + member + '">';
+
+  for (let age = startAge; age <= endAge; age++) {
+    const selected = age === selectedAge ? ' selected' : '';
+    html += '<option value="' + age + '"' + selected + '>' + age + ' Years</option>';
+  }
+
+  html += '</select>';
+  html += '</div>';
+});
+
+
+html += '</div>';
+
+
+  // Slider section
+  html += '<div class="section">';
+  html += '<label>Total Coverage (in Lakh)</label>';
+  html += '<div class="slider-container">';
+  html += '<div class="slider-label" id="coverageValue">' + toLakh(matchedItems[0].defaultCoverage) + '</div>';
+  html += '<input type="range" id="coverageSlider" min="' + matchedItems[0].minTotalCoverage + '" max="' + matchedItems[0].maxTotalCoverage + '" step="' + matchedItems[0].stepCoverage + '" value="' + matchedItems[0].defaultCoverage + '">';
+  html += '<div class="coverage-range-labels">';
+  html += '<span>' + toLakh(matchedItems[0].minTotalCoverage) + '</span>';
+  html += '<span>' + toLakh(matchedItems[0].maxTotalCoverage) + '</span>';
+  html += '</div>';
+  html += '</div>';
+  html += '</div>';
+
+  // Tenure section
+  html += '<div class="section">';
+  html += '<label>Policy Tenure</label>';
+  html += '<div class="tenure-options">';
+
+  matchedItems[0].tenureAndDiscount.forEach((item, index) => {
+    html += '<div class="tenure-box' + (index === 0 ? ' selected' : '') + '" data-tenure="' + item.years + '">';
+    html += item.years + ' Year' + (item.years > 1 ? 's' : '');
+    if (item.discount > 0) {
+      html += '<div class="discount">' + (item.discount * 100).toFixed(1) + '% OFF</div>';
+    }
+    html += '</div>';
+  });
+
+  html += '</div>'; // tenure-options
+  html += '</div>'; // section
+
+  html += '</div>'; // premsection
+
+  document.querySelector(".productform-container").insertAdjacentHTML("beforeend", html);
+
+const sliderinput=document.getElementById('coverageSlider');
+const sliderlabel=document.getElementById('coverageValue');
+sliderinput.addEventListener("input", function (e) {
+  debugger
+    if (e.target && e.target.id === "coverageSlider") {
+      const value = Number(e.target.value);
+      sliderinput.innerText = (value / 100000) + " L";
+      sliderlabel.innerText=(value / 100000) + " L";
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (e.target && e.target.classList.contains("tenure-box")) {
+      // Remove 'selected' class from all
+      document.querySelectorAll(".tenure-box").forEach(el => el.classList.remove("selected"));
+  
+      // Add 'selected' to clicked box
+      e.target.classList.add("selected");
+  
+      // Get selected tenure
+      const selectedTenure = e.target.getAttribute("data-tenure");
+      console.log("Selected Tenure:", selectedTenure);
+    }
+  });
 }
 
+
+async function callGQL(){
+  const myHeaders = new Headers();
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+};
+
+fetch("https://publish-p102857-e1312424.adobeaemcloud.com/graphql/execute.json/wknd-shared/pr", requestOptions)
+  .then((response) => response.json())  // <- parse as JSON, not text
+  .then((result) => {
+    const configProductName = window.productConfig?.[0]?.CONFIG_PRODUCTNAME;
+
+    matchedItems = result.data.productFormList.items?.filter(item => 
+      item.productname === configProductName
+    ) || [];
+
+    console.log("Matched Items:", matchedItems);
+  })
+  .catch((error) => console.error("Fetch error:", error));
+
+
+}
 export default async function decorate(block) {
   const formlink = block.querySelector("a[href]").getAttribute("title");
   const form = await createFormMulti(formlink);
@@ -176,4 +448,42 @@ export default async function decorate(block) {
   await getProductConfig(
     "https://main--health-insurance-demo--eds-dwao.aem.page/productconfig.json"
   );
+  debugger
+
+  const meme = await callGQL()
+  // const premiumwe = await renderpremiumsection();
+  // block.appendChild(premiumwe)
+  // Select all elements with class "my-button"
+  const buttons = document.querySelectorAll(".family-rel");
+
+  // Loop through the NodeList and add a click event to each
+  buttons.forEach((button) => {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const checkbox = this.querySelector('input[type="checkbox"]');
+      const value = checkbox.value;
+
+      const isChild = value === "Son" || value === "Daughter";
+      const key = isChild ? "child" : "adult";
+
+      // Create the object to track selection if it doesn't exist
+
+      checkbox.checked = !checkbox.checked;
+
+      if (checkbox.checked) {
+        selectedData.count[key]++;
+        if (!selectedData.members.includes(value)) {
+          selectedData.members.push(value);
+        }
+      } else {
+        selectedData.count[key] = Math.max(0, selectedData.count[key] - 1);
+        selectedData.members = selectedData.members.filter(
+          (member) => member !== value
+        );
+      }
+
+      console.log(selectedData);
+    });
+  });
 }

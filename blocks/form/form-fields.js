@@ -372,6 +372,35 @@ const createMultiStepForm = (fd) => {
   return {fieldWrapper};
 }
 
+const createImageCheckbox = (fd) => {
+  fd.Type="checkbox"
+  const { field, fieldWrapper } = createInput(fd);
+  if (fd.Checked) {
+    field.value = field.value;
+    field.setAttribute("checked", true);
+  }
+  fieldWrapper.classList.add("selection-wrapper");
+
+  const imgEl = document.createElement('img');
+    imgEl.setAttribute('class', 'lozad');
+    imgEl.setAttribute('src', '');
+    imgEl.setAttribute('src', fd.Placeholder);
+    imgEl.setAttribute('alt', fd.Value);
+    imgEl.setAttribute('width', '39');
+    imgEl.setAttribute('height', '41');
+    fieldWrapper.append(imgEl);
+  return { field, fieldWrapper };  
+
+    
+  // if ((fd.Mandatory = "true")) {
+  //   const { errField } = createErrMsg(fd);
+  //   fieldWrapper.append(errField);
+  // }
+
+};
+
+
+
 
 const FIELD_CREATOR_FUNCTIONS = {
   select: createSelect,
@@ -389,7 +418,8 @@ const FIELD_CREATOR_FUNCTIONS = {
   calrange: createCalculatorRange,
   button:createInputButton,
   multistep:createMultiStepForm,
-  div:createDivWrapper
+  div:createDivWrapper,
+  imagecheckbox:createImageCheckbox
 };
 
 export default async function createField(fd, form) {
