@@ -373,6 +373,7 @@ const createMultiStepForm = (fd) => {
 }
 
 const createImageCheckbox = (fd) => {
+
   fd.Type="checkbox"
   const { field, fieldWrapper } = createInput(fd);
   if (fd.Checked) {
@@ -389,6 +390,15 @@ const createImageCheckbox = (fd) => {
     imgEl.setAttribute('width', '39');
     imgEl.setAttribute('height', '41');
     fieldWrapper.append(imgEl);
+
+    if(fd.Value=="Son"||fd.Value=="Daughter"){
+      let html=`<div class="number-control">
+   <button class="decrement" id="decrement">-</button>
+  <span class="counter" id="counter">0</span>
+ <button class="increment"id="increment">+</button>
+ </div>`
+fieldWrapper.insertAdjacentHTML("beforeend", html);
+    }
   return { field, fieldWrapper };  
 
     

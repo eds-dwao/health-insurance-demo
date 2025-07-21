@@ -7,7 +7,12 @@ window.selectedData = {
     adult: 0,
   },
   members: [], // To store selected member types like "Son", "Spouse"
+  tenure:"",
+  coverage:""
 };
+let count = 0;
+const maxLimit = 2;
+
 
 window.matchedItems=[];
 function createBackButton(index, steps) {
@@ -112,7 +117,9 @@ async function createFormMulti(formHref) {
   return form;
 }
 
-function calculatePremium( sumInsured, tenureYears) {
+function calculatePremium() {
+  let tenureYears= window.selectedData.tenure
+  let sumInsured=window.selectedData.coverage
   const productConfig = window.productConfig?.[0];
 
   if (!productConfig) {
@@ -133,10 +140,14 @@ function calculatePremium( sumInsured, tenureYears) {
   // Convert all ages to numbers
   const memberAges = familyMembers.map((m) => Number(m.age));
 
+  console.log(memberAges,"memberAges")
+
   let totalPremium = 0;
 
  
     const anchorAge = Math.max(...memberAges);
+    console.log(anchorAge,"anchorAge")
+
     const ageFactor = getAgeFactor(anchorAge);
 
     totalPremium =
@@ -146,7 +157,13 @@ function calculatePremium( sumInsured, tenureYears) {
       tenureYears *
       tenureDiscount;
   
-  
+      console.log(ageFactor,"ageFactor")
+
+      console.log(tenureYears,"tenureYears")
+      console.log(tenureDiscount,"tenureDiscount")
+
+      console.log(sumInsured,"sumInsured")
+
 
   console.log('Total Premium:', totalPremium);
   return Math.round(totalPremium);
@@ -158,6 +175,9 @@ function getAgeFactor(age) {
   if (age <= 30) return 1.2;
   if (age <= 45) return 1.5;
   if (age <= 60) return 2.0;
+  if (age <= 70) return 2.2;
+  if (age <= 80) return 2.4;
+
   return 2.5;
 }
 
@@ -169,6 +189,35 @@ const discountTiers = [
   // { years: 4, discount: 0.15 }
 ];
 
+function checkMemberAllowed(selectedData) {
+  let selectedAdults=selectedData.adult;
+  let selectedChildren=selectedData.child;
+  const config = window.productConfig[0];
+
+  const totalMembers = selectedAdults + selectedChildren;
+
+  if (totalMembers < parseInt(config.minMember)) {
+      return config.ErrMsgOneMember || "Minimum number of members not met.";
+  }
+
+  if (totalMembers > parseInt(config.maxMember)) {
+      return config.ErrMsgMaxMember || "Exceeds maximum allowed members.";
+  }
+
+  if (selectedAdults < parseInt(config.minMember)) {
+      return config.ErrMsgOneAdult || "At least one adult is required.";
+  }
+
+  if (selectedAdults > parseInt(config.adultMember)) {
+      return config.ErrMsgAdultMember || "Too many adults selected.";
+  }
+
+  if (selectedChildren > parseInt(config.child)) {
+      return config.ErrMsgChildNo || "Too many children selected.";
+  }
+
+  return null; // ✅ All checks passed
+}
 
 
 function getTenureDiscount(tenureYears) {
@@ -176,6 +225,10 @@ function getTenureDiscount(tenureYears) {
   return tier ? 1 - tier.discount : 1.0;
 }
 
+function displayPremium(premium){
+
+  document.querySelector('#premium-amount').innerText=premium;
+}
 function enableStepNavigation(form) {
   const steps = form.querySelectorAll(".form-step");
 
@@ -217,10 +270,18 @@ function enableStepNavigation(form) {
         });
 
         if (allValid) {
+
           const isFormStep2 = e.target.form && e.target.form.id === "step2";
           const isFormStep3 = e.target.form && e.target.form.id === "step3";
 
           if (isFormStep2) {
+           const erroMsg= checkMemberAllowed(selectedData.count)
+if(erroMsg){
+
+  e.target.form.querySelector("#fam-error").innerText=erroMsg;
+  return
+
+}
             const config = window.productConfig[0]; // Get the config object
             const dropdownContainer =
               document.getElementById("person-dropdown"); // or any container
@@ -251,12 +312,7 @@ function enableStepNavigation(form) {
               const select = document.createElement("select");
               select.id = `age-${member}-${index}`;
               select.name = `age-${member}-${index}`;
-              console.log(`Member: ${member}`);
-              console.log(`isChild: ${isChild}`);
-              console.log(`Start Age: ${startAge}`);
-              console.log(`End Age: ${endAge}`);
-              console.log("Type of startAge:", typeof startAge);
-              console.log("Type of endAge:", typeof endAge);
+           
               for (let age = startAge; age <= endAge; age++) {
                 const option = document.createElement("option");
                 option.value = age;
@@ -294,11 +350,13 @@ if(isFormStep3){
             steps[index + 1].style.display = "block";
             updateStepper(steps[index + 1]);
           } else {
-            const premium = calculatePremium( parseInt(matchedItems[0].defaultCoverage), parseInt(window.productConfig[0].tenure));
+            window.selectedData.tenure=parseInt(matchedItems[0].minimumTenure)
+window.selectedData.coverage=parseInt(matchedItems[0].defaultCoverage)
+            const premium = calculatePremium();
 console.log('Final Premium:', premium);
 
 const premsec =  renderpremiumsection();
-
+displayPremium(premium)
           }
         }
       });
@@ -316,7 +374,7 @@ async function getProductConfig(formHref) {
   );
 }
 function renderpremiumsection() {
-  debugger
+
   document.querySelectorAll('.productform-wrapper')[0].style.display = 'none';
 
   // Helper to format rupees to Lakhs
@@ -385,19 +443,40 @@ html += '</div>';
 
   html += '</div>'; // tenure-options
   html += '</div>'; // section
-
+  html += '<div><h1>Premium Amount is :</h1><p id="premium-amount"></p></div>'; 
   html += '</div>'; // premsection
 
   document.querySelector(".productform-container").insertAdjacentHTML("beforeend", html);
 
 const sliderinput=document.getElementById('coverageSlider');
 const sliderlabel=document.getElementById('coverageValue');
+document.querySelectorAll('.member-age-select select').forEach(select => {
+  select.addEventListener('change', (event) => {
+    const selage = event.target.value;
+    const selmember = event.target.getAttribute('data-member');
+    console.log(`${selmember} age changed to: ${selage}`);
+
+    selectedData.members.forEach((data)=>{
+
+      if(data.member == selmember){
+        data.age=parseInt(selage)
+      }
+      
+  })
+  const premium =   calculatePremium()
+      console.log('Final Premium:', premium);
+      displayPremium(premium)
+  });
+});
 sliderinput.addEventListener("input", function (e) {
-  debugger
     if (e.target && e.target.id === "coverageSlider") {
       const value = Number(e.target.value);
       sliderinput.innerText = (value / 100000) + " L";
       sliderlabel.innerText=(value / 100000) + " L";
+      window.selectedData.coverage=value;
+      const premium = calculatePremium();
+      console.log('Final Premium:', premium);
+            displayPremium(premium)
     }
   });
 
@@ -411,7 +490,12 @@ sliderinput.addEventListener("input", function (e) {
   
       // Get selected tenure
       const selectedTenure = e.target.getAttribute("data-tenure");
-      console.log("Selected Tenure:", selectedTenure);
+      window.selectedData.tenure=parseInt(selectedTenure)
+      const premium = calculatePremium();
+      console.log('Final Premium:', premium);
+      
+      displayPremium(premium)     
+     console.log("Selected Tenure:", selectedTenure);
     }
   });
 }
@@ -425,43 +509,51 @@ const requestOptions = {
   headers: myHeaders,
 };
 
-fetch('https://publish-p102857-e1312424.adobeaemcloud.com/graphql/execute.json/wknd-shared/pr', {
-  method: 'GET', // or 'GET' depending on the API
-  headers: {
-    'Content-Type': 'application/json'
-    // Add any auth headers if required
-  },
-  // body: JSON.stringify({ key: 'value' }) // only for POST/PUT
-})
-.then(res => {
-  if (res.status === 204) {
-    console.warn("204 No Content – response is intentionally empty");
-    return null;
-  }
-  return res.json(); // only if status is not 204
-})
-.then(data => {
-  if (data) console.log("Data:", data);
-})
-.catch(err => {
-  console.error("Fetch error:", err);
-});
+// fetch('https://publish-p102857-e1312424.adobeaemcloud.com/graphql/execute.json/wknd-shared/pr', {
+//   method: 'GET', // or 'GET' depending on the API
+//   headers: {
+//     'Content-Type': 'application/json'
+//     // Add any auth headers if required
+//   },
+//   // body: JSON.stringify({ key: 'value' }) // only for POST/PUT
+// })
+// .then(res => {
+//   if (res.status === 204) {
+//     console.warn("204 No Content – response is intentionally empty");
+//     return null;
+//   }
+//   return res.json(); // only if status is not 204
+// })
+// .then(data => {
+//   if (data) console.log("Data:", data);
+// })
+// .catch(err => {
+//   console.error("Fetch error:", err);
+// });
+const shouldBustCache = false; // Set to false when you don't want to add timestamp
+let url="https://publish-p102857-e1312424.adobeaemcloud.com/graphql/execute.json/wknd-shared/newpr"
+if (shouldBustCache) {
+  const ts = Date.now();
+  url += `?ts=${ts}`;
+}
 
-// fetch("https://publish-p102857-e1312424.adobeaemcloud.com/graphql/execute.json/wknd-shared/pr", requestOptions)
-//   .then((response) => response.json())  // <- parse as JSON, not text
-//   .then((result) => {
-//     const configProductName = window.productConfig?.[0]?.CONFIG_PRODUCTNAME;
+fetch(url
+  , requestOptions)
+  .then((response) => response.json())  // <- parse as JSON, not text
+  .then((result) => {
+    const configProductName = window.productConfig?.[0]?.CONFIG_PRODUCTNAME;
 
-//     matchedItems = result.data.productFormList.items?.filter(item => 
-//       item.productname === configProductName
-//     ) || [];
+    matchedItems = result.data.productFormList.items?.filter(item => 
+      item.productname === configProductName
+    ) || [];
 
-//     console.log("Matched Items:", matchedItems);
-//   })
-//   .catch((error) => console.error("Fetch error:", error));
+    console.log("Matched Items:", matchedItems);
+  })
+  .catch((error) => console.error("Fetch error:", error));
 
 
 }
+
 export default async function decorate(block) {
   const formlink = block.querySelector("a[href]").getAttribute("title");
   const form = await createFormMulti(formlink);
@@ -470,42 +562,127 @@ export default async function decorate(block) {
   await getProductConfig(
     "https://main--health-insurance-demo--eds-dwao.aem.page/productconfig.json"
   );
-  debugger
 
   const meme = await callGQL()
-  // const premiumwe = await renderpremiumsection();
-  // block.appendChild(premiumwe)
-  // Select all elements with class "my-button"
-  const buttons = document.querySelectorAll(".family-rel");
 
-  // Loop through the NodeList and add a click event to each
+  const buttons = document.querySelectorAll(".family-rel");
+  const counterSpan = document.getElementById('counter');
+
+  document.querySelectorAll('.increment').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+  
+      const container = this.closest('.family-rel');
+      const counterSpan = container.querySelector('.counter');
+      const checkbox = container.querySelector('input[type="checkbox"]');
+      const value = checkbox.value;
+      const isChild = value === "Son" || value === "Daughter";
+  
+      let count = parseInt(counterSpan.textContent, 10) || 0;
+  
+      if (count < 2) {
+        count++;
+        counterSpan.textContent = count;
+  
+        // ✅ Update selectedData
+        if (isChild) {
+          selectedData.count.child += 1;
+  selectedData.members.push(value)
+          // Auto-check the checkbox
+          checkbox.checked = true;
+  
+          // Add to members if not already there
+          if (!selectedData.members.includes(value)) {
+            selectedData.members.push(value);
+          }
+        }
+  
+        console.log(`${value} incremented to`, count);
+        console.log("Updated selectedData:", selectedData);
+      }
+    });
+  });
+  
+  document.querySelectorAll('.decrement').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+  
+      const container = this.closest('.family-rel');
+      const counterSpan = container.querySelector('.counter');
+      const checkbox = container.querySelector('input[type="checkbox"]');
+      const value = checkbox.value;
+      const isChild = value === "Son" || value === "Daughter";
+  
+      let count = parseInt(counterSpan.textContent, 10) || 0;
+  
+      if (count > 0) {
+        count--;
+        counterSpan.textContent = count;
+  
+        // ✅ Update selectedData
+        if (isChild) {
+          selectedData.count.child = Math.max(0, selectedData.count.child - 1);
+          selectedData.members.pop(value)
+
+          // If count is 0, uncheck checkbox and remove member
+          if (count === 0) {
+            checkbox.checked = false;
+            selectedData.members = selectedData.members.filter(m => m !== value);
+          }
+        }
+  
+        console.log(`${value} decremented to`, count);
+        console.log("Updated selectedData:", selectedData);
+      }
+    });
+  });
+  
+  
+  
+  
+  
   buttons.forEach((button) => {
     button.addEventListener("click", function (e) {
+      if (e.target.closest(".number-control")) return;
+  
       e.preventDefault();
-
+  
       const checkbox = this.querySelector('input[type="checkbox"]');
       const value = checkbox.value;
-
       const isChild = value === "Son" || value === "Daughter";
       const key = isChild ? "child" : "adult";
-
-      // Create the object to track selection if it doesn't exist
-
+  
       checkbox.checked = !checkbox.checked;
-
+  
+      const counter = this.querySelector(".counter");
+  
       if (checkbox.checked) {
-        selectedData.count[key]++;
         if (!selectedData.members.includes(value)) {
           selectedData.members.push(value);
         }
+  
+        if (isChild) {
+          counter.textContent = "1";
+          selectedData.count.child += 1;
+        } else {
+          selectedData.count.adult += 1;
+        }
+  
       } else {
-        selectedData.count[key] = Math.max(0, selectedData.count[key] - 1);
-        selectedData.members = selectedData.members.filter(
-          (member) => member !== value
-        );
+        if (isChild) {
+          const oldCount = parseInt(counter.textContent, 10) || 0;
+          selectedData.count.child = Math.max(0, selectedData.count.child - oldCount);
+          counter.textContent = "0";
+        } else {
+          selectedData.count.adult = Math.max(0, selectedData.count.adult - 1);
+        }
+  
+        selectedData.members = selectedData.members.filter(m => m !== value);
       }
-
-      console.log(selectedData);
+  
+      console.log("Checkbox click:", selectedData);
     });
   });
 }
