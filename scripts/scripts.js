@@ -66,7 +66,63 @@ export function decorateMain(main) {
   decorateSections(main);
   decorateBlocks(main);
 }
+function initWebSDK(path, config) {
+  // Preparing the alloy queue
+  if (!window.alloy) {
+    // eslint-disable-next-line no-underscore-dangle
+    (window.__alloyNS ||= []).push('alloy');
+    window.alloy = (...args) => new Promise((resolve, reject) => {
+      window.setTimeout(() => {
+        window.alloy.q.push([resolve, reject, args]);
+      });
+    });
+    window.alloy.q = [];
+  }
+  // Loading and configuring the websdk
+  return new Promise((resolve) => {
+    import(path)
+      .then(() => window.alloy('configure', config))
+      .then(resolve);
+  });
+}
 
+async function getAndApplyRenderDecisions() {
+
+  // Get the decisions, but don't render them automatically
+  // so we can hook up into the AEM EDS page load sequence
+  const response = await window.alloy('sendEvent', { renderDecisions: false });
+  const { propositions } = response;
+  onDecoratedElement(async () => {
+    await window.alloy('applyPropositions', { propositions });
+    // keep track of propositions that were applied
+    propositions.forEach((p) => {
+      p.items = p.items.filter((i) => i.schema !== 'https://ns.adobe.com/personalization/dom-action' || !getElementForProposition(i));
+    });
+  });
+
+  // Reporting is deferred to avoid long tasks
+  window.setTimeout(() => {
+    // Report shown decisions
+    window.alloy('sendEvent', {
+      xdm: {
+        eventType: 'decisioning.propositionDisplay',
+        _experience: {
+          decisioning: { propositions },
+        },
+      },
+    });
+  });
+}
+
+let alloyLoadedPromise = initWebSDK('./alloy.js', {
+    datastreamId: '0f909b86-b2f2-4129-81ea-1937ef0be7d7',
+    orgId: 'D7A63A725B02CDC70A495C49@AdobeOrg',
+  });
+// alloyLoadedPromise.then(() => getAndApplyRenderDecisions());
+console.log(getMetadata('target'));
+if (getMetadata('target')  && getMetadata('target')=='on') {
+ alloyLoadedPromise.then(() => getAndApplyRenderDecisions());
+}
 /**
  * Loads everything needed to get to LCP.
  * @param {Element} doc The container element
@@ -78,6 +134,8 @@ async function loadEager(doc) {
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
+    await alloyLoadedPromise;
+
     document.body.classList.add('appear');
     await loadSection(main.querySelector('.section'), waitForFirstImage);
   }
