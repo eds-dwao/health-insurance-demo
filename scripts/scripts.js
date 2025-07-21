@@ -67,6 +67,40 @@ export function decorateMain(main) {
   decorateSections(main);
   decorateBlocks(main);
 }
+
+//  Target   script config start
+function toCssSelector(selector) {
+  return selector.replace(/(\.\S+)?:eq\((\d+)\)/g, (_, clss, i) => `:nth-child(${Number(i) + 1}${clss ? ` of ${clss})` : ''}`);
+}
+
+async function getElementForProposition(proposition) {
+  const selector = proposition.data.prehidingSelector
+    || toCssSelector(proposition.data.selector);
+  return document.querySelector(selector);
+}
+
+function onDecoratedElement(fn) {
+  // Apply propositions to all already decorated blocks/sections
+  if (document.querySelector('[data-block-status="loaded"],[data-section-status="loaded"]')) {
+    fn();
+  }
+
+  const observer = new MutationObserver((mutations) => {
+    if (mutations.some((m) => m.target.tagName === 'BODY'
+      || m.target.dataset.sectionStatus === 'loaded'
+      || m.target.dataset.blockStatus === 'loaded')) {
+      fn();
+    }
+  });
+  // Watch sections and blocks being decorated async
+  observer.observe(document.querySelector('main'), {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['data-block-status', 'data-section-status'],
+  });
+  // Watch anything else added to the body
+  observer.observe(document.querySelector('body'), { childList: true });
+}
 function initWebSDK(path, config) {
   // Preparing the alloy queue
   if (!window.alloy) {
@@ -124,6 +158,10 @@ console.log(getMetadata('target'));
 if (getMetadata('target')  && getMetadata('target')=='on') {
  alloyLoadedPromise.then(() => getAndApplyRenderDecisions());
 }
+
+// Target script config end
+
+
 /**
  * Loads everything needed to get to LCP.
  * @param {Element} doc The container element
