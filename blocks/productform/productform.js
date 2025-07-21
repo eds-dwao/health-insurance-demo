@@ -365,10 +365,14 @@ displayPremium(premium)
 }
 
 async function getProductConfig(formHref) {
-  const resp = await fetch(formHref);
+    const resp = await fetch(formHref);
   const json = await resp.json();
 
   let urlParm = window.location.search.split("=")[1];
+  if(!urlParm){
+
+    urlParm="careSupreme"
+}
   window.productConfig = json.data.filter(
     (item) => item.CONFIG_PRODUCTNAME === urlParm
   );
