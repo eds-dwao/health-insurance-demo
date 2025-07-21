@@ -257,7 +257,7 @@ function enableStepNavigation(form) {
               allValid = false;
               input.classList.add("field-error");
               const msg = input.nextElementSibling;
-              if (msg && msg.classList.contains("error-msg")) {
+              if (msg && msg.classList.contains("errorMsg")) {
                 msg.style.display = "block";
               }
             } else {
