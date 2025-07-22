@@ -13,7 +13,7 @@ export default function decorate(block) {
   articleEl.setAttribute('class', 'container d-flex');
 
   const aEl = document.createElement('a');
-  aEl.setAttribute('href', 'https://www.careinsurance.com/');
+  aEl.setAttribute('href', 'https://main--health-insurance-demo--eds-dwao.aem.page');
   aEl.setAttribute('class', 'd-flex');
   aEl.setAttribute('aria-label', 'Care Insurance Logo');
 
