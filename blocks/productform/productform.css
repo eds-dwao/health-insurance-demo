@@ -457,6 +457,9 @@ fieldset {
     color: white;
     border-color: #007bff;
   }
+  .tenure-box.selected .discount {
+    color: black;
+  }
 
   .discount {
     font-size: 12px;
