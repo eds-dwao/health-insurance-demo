@@ -1,3 +1,15 @@
 .header-wrapper .navigation{
   padding-top: 50px;
 }
+.menu_dropdown{
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  
+}
+
+.nmenu-item:hover .menu_dropdown,
+.menu-item.open .menu_dropdown {
+  display: block;
+}
