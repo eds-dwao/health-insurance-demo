@@ -518,6 +518,8 @@ export default function decorate(block) {
 
   const useEl6 = document.createElement('img');
   useEl6.setAttribute('src', 'https://cdn-icons-png.freepik.com/512/15571/15571816.png');
+  useEl6.setAttribute('height','30');
+  useEl6.setAttribute('width','30')
   svgEl6.append(useEl6);
   liEl47.append(svgEl6);
 
