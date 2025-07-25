@@ -450,7 +450,6 @@ function renderpremiumsection() {
   html += '<div class="tenure-options">';
 
   matchedItems[0].tenureAndDiscount.forEach((item, index) => {
-    debugger;
     const isSelected = item.years === parseInt(matchedItems[0].minimumTenure);
     html +=
       '<div class="tenure-box' +
