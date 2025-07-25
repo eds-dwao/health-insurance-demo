@@ -537,7 +537,7 @@ async function callGQL() {
     headers: myHeaders,
   };
 
-  const shouldBustCache = false; // Set to false when you don't want to add timestamp
+  const shouldBustCache = true; // Set to false when you don't want to add timestamp
   let url =
     "https://publish-p102857-e1312424.adobeaemcloud.com/graphql/execute.json/wknd-shared/newpr";
   if (shouldBustCache) {
