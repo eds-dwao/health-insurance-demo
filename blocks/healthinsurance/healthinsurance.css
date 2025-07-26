@@ -466,44 +466,7 @@
         gap: 1rem
     }
 
-    .popup_overlay .viewall_popup {
-        margin: 0 20px;
-        padding: 20px
-    }
-
-    .popup_overlay .viewall_popup .tabs {
-        justify-content: space-between;
-        padding-bottom: 10px
-    }
-
-    .popup_overlay .viewall_popup .tabs li {
-        padding: 0;
-        background: 0 0
-    }
-
-    .popup_overlay .viewall_popup .tabs li.active-tab {
-        background: 0 0;
-        color: #136da3;
-        font-weight: 500
-    }
-
-    .popup_overlay .viewall_popup .tabs-content {
-        height: 309px;
-        overflow-y: auto
-    }
-
-    .popup_overlay .viewall_popup .tabs-content li aside div {
-        width: 40%
-    }
-
-    .popup_overlay .viewall_popup h3 {
-        font-size: 1.25rem
-    }
-
-    .popup_overlay .viewall_popup.exit_intent {
-        padding: 20px
-    }
-
+  
     .get_Quote article .sales_number {
         flex-direction: column;
         align-items: flex-start;
@@ -527,40 +490,6 @@
         flex-wrap: wrap
     }
 
-    .popup_overlay .viewall_popup {
-        margin: 0 20px;
-        padding: 20px
-    }
-
-    .popup_overlay .viewall_popup .tabs {
-        justify-content: space-between;
-        padding-bottom: 10px
-    }
-
-    .popup_overlay .viewall_popup .tabs li {
-        padding: 0;
-        background: 0 0
-    }
-
-    .popup_overlay .viewall_popup .tabs li.active-tab {
-        background: 0 0;
-        color: #136da3;
-        font-weight: 500
-    }
-
-    .popup_overlay .viewall_popup .tabs-content {
-        height: 309px;
-        overflow-y: auto
-    }
-
-    .popup_overlay .viewall_popup .tabs-content li aside div {
-        width: 100%;
-        display: block
-    }
-
-    .popup_overlay .viewall_popup h3 {
-        font-size: 1.25rem
-    }
 }
 
 @media screen and (max-width:340px) {
