@@ -2869,7 +2869,7 @@ h2.ins_heading.common_btn.accordian_btn {
 
 .navigation .nav-bg article {
     align-items: center;
-    padding: 1.2rem 1rem
+    /* padding: 1.2rem 1rem */
 }
 
 .navigation .nav-bg article nav {
