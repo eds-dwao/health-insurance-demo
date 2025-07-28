@@ -13,7 +13,7 @@ export default function decorate(block) {
   articleEl.setAttribute('class', 'container d-flex');
 
   const aEl = document.createElement('a');
-  aEl.setAttribute('href', 'https://main--health-insurance-demo--eds-dwao.aem.page');
+  aEl.setAttribute('href', `${window.hlx.codeBasePath}`);
   aEl.setAttribute('class', 'd-flex');
   aEl.setAttribute('aria-label', 'Care Insurance Logo');
 
@@ -45,7 +45,7 @@ export default function decorate(block) {
   const liEl2 = document.createElement('li');
 
   const aEl2 = document.createElement('a');
-  aEl2.setAttribute('href', 'https://main--health-insurance-demo--eds-dwao.aem.page/healthinsurance');
+  aEl2.setAttribute('href', `${window.hlx.codeBasePath}/healthinsurance`);
   aEl2.textContent = 'Health Insurance Plans';
   liEl2.append(aEl2);
   ulEl2.append(liEl2);
@@ -162,7 +162,7 @@ export default function decorate(block) {
   const liEl16 = document.createElement('li');
 
   const aEl15 = document.createElement('a');
-  aEl15.setAttribute('href', 'https://main--health-insurance-demo--eds-dwao.aem.page/travelinsurance');
+  aEl15.setAttribute('href', `${window.hlx.codeBasePath}/travelinsurance`);
   aEl15.textContent = 'Travel Insurance Policy';
   liEl16.append(aEl15);
   ulEl3.append(liEl16);

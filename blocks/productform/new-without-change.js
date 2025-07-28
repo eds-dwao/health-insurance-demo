@@ -511,6 +511,6 @@ export default async function decorate(block) {
   block.replaceWith(form);
   enableStepNavigation(form);
   await getProductConfig(
-    "https://main--health-insurance-demo--eds-dwao.aem.page/productconfig.json"
+    "https://main--health-insurance-demo--eds-dwao.aem.live/productform.json"
   );
 }

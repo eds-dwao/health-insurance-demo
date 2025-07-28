@@ -362,7 +362,7 @@ async function getProductConfig(formHref) {
   const resp = await fetch(formHref);
   const json = await resp.json();
 
-  let urlParm = window.location.search.split("=")[1];
+  let urlParm = window.location.search?.split("=")[1];
   if (!urlParm) {
     urlParm = "careSupreme";
   }
@@ -536,7 +536,7 @@ async function callGQL() {
     headers: myHeaders,
   };
 
-  const shouldBustCache = false; // Set to false when you don't want to add timestamp
+  const shouldBustCache = true; // Set to false when you don't want to add timestamp
   let url =
     "https://publish-p102857-e1312424.adobeaemcloud.com/graphql/execute.json/wknd-shared/newpr";
   if (shouldBustCache) {
@@ -565,7 +565,7 @@ export default async function decorate(block) {
   block.replaceWith(form);
   enableStepNavigation(form);
   await getProductConfig(
-    "https://main--health-insurance-demo--eds-dwao.aem.page/productconfig.json"
+    "https://main--health-insurance-demo--eds-dwao.aem.live/productconfig.json"																					
   );
 
   const meme = await callGQL();
