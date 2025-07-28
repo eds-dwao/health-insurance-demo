@@ -123,7 +123,6 @@ const createConfirmation = (fd, form) => {
 };
 
 const createSubmit = (fd) => {
-  debugger
   const button = document.createElement("button");
   button.textContent = fd.Label || fd.Name;
   button.classList.add("button");
