@@ -123,10 +123,12 @@ const createConfirmation = (fd, form) => {
 };
 
 const createSubmit = (fd) => {
+  debugger
   const button = document.createElement("button");
   button.textContent = fd.Label || fd.Name;
   button.classList.add("button");
   button.type = "submit";
+  button.id=fd?.ID ? fd.ID :"";
 
   const fieldWrapper = createFieldWrapper(fd);
   fieldWrapper.append(button);
